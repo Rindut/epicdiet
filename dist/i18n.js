@@ -10,6 +10,7 @@ export const messages = {
   'Satu hari.':'One day.','Satu langkah lagi.':'One more step.',
   'Mulai dari 82 kg, fokus dulu ke 75 kg. Catat yang bisa kamu lakukan, termasuk di hari yang tidak sempurna.':'Start at 82 kg and focus on 75 kg first. Log what you can do, including on imperfect days.',
   'Fokus pertama':'First focus','Setelah Epic 1':'After Epic 1','Evaluasi progres':'Review your progress','Fase opsional':'Optional phase',
+  'Perjalanan berat dari 82 hingga 60 kg dalam empat Epic':'Weight journey from 82 to 60 kg across four Epics',
   'Cukup satu tindakan tercapai untuk menjaga langkah hari ini.':'One completed action is enough to keep moving today.',
   'Siapkan perjalananmu':'Set up your journey','Tanggal mulai':'Start date','Berat awal':'Starting weight','Tinggi':'Height',
   'Protein / hari':'Protein / day','Gerak / hari':'Movement / day','Latihan kekuatan / minggu':'Strength training / week',
