@@ -26,3 +26,9 @@
 .choices.three .choice.yellow[aria-pressed=true]::after{background:#c7992a}
 .choices.three .choice.red[aria-pressed=true]::after{background:#c36c6c}
 @media(max-width:380px){.choices.three{gap:6px}.choices.three .choice{min-height:116px;padding:11px 4px!important}.choices.three .choice strong{font-size:13px}.choices.three .choice small{font-size:10px}}
+.onboard-grid{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)}
+.form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.onboarding,.onboard-grid>*,.onboard-form,.form-grid>*,.field,.input-wrap{min-width:0;max-width:100%}
+.onboarding .input,.onboarding select,.onboarding textarea{min-width:0;max-width:100%;width:100%;box-sizing:border-box}
+.onboarding input[type=date]{min-width:0;max-width:100%;width:100%}
+@media(max-width:620px){.onboarding{width:100%}.onboard-grid{display:block}.onboard-form{width:100%}.onboard-copy,.onboard-form,.onboard-form .field{overflow-wrap:anywhere}}

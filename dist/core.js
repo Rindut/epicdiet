@@ -35,7 +35,7 @@ export function validateProfile(raw,today) {
   const errors={}; for(const key of ['baselineKg','heightCm','proteinG','movementMinutes','strengthSessions']){const n=parseNumber(raw[key]);if(n===null||!Number.isFinite(n)||n<=0)errors[key]='Isi angka lebih dari 0.';raw[key]=n;}
   if(raw.baselineKg!==null&&Math.round(raw.baselineKg*10)/10<=75)errors.baselineKg='Berat awal perjalanan ini harus minimal 75,1 kg.';
   if(raw.strengthSessions!==null&&(!Number.isInteger(raw.strengthSessions)||raw.strengthSessions>7))errors.strengthSessions='Pilih 1–7 sesi per minggu.';
-  if(!validDate(raw.startDate)||raw.startDate>today)errors.startDate='Pilih tanggal mulai paling lambat hari ini.';
+  if(!validDate(raw.startDate)||raw.startDate>addDays(today,1))errors.startDate='Pilih tanggal mulai paling lambat besok.';
   if(![60,65].includes(Number(raw.longTermGoalKg)))errors.longTermGoalKg='Pilih 60 atau 65 kg.';
   return errors;
 }
@@ -47,7 +47,7 @@ export function mvd(entry,target) {
   if(e.strength==='done')actions.push('Latihan kekuatan');
   return {actions,state:actions.length?'achieved':FIELDS.every(k=>e[k]!=null)?'not_achieved':'unknown'};
 }
-export function weeks(state,today){if(!state.profile)return [];const out=[];for(let d=weekStart(state.profile.startDate);d<=weekStart(today);d=addDays(d,7))out.push(d);return out;}
+export function weeks(state,today){if(!state.profile||state.profile.startDate>today)return [];const out=[];for(let d=weekStart(state.profile.startDate);d<=weekStart(today);d=addDays(d,7))out.push(d);return out;}
 export function weeklyBase(state,ws,today) {
   const end=addDays(ws,6);const dates=Array.from({length:7},(_,i)=>addDays(ws,i));const eligible=dates.filter(d=>d>=state.profile.startDate&&d<=today);
   const entries=eligible.map(d=>state.entries[d]).filter(Boolean);const weights=entries.filter(e=>Number.isFinite(e.weightKg)&&e.weightKg>0);

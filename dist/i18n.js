@@ -18,6 +18,10 @@ export const messages = {
   'Target kebiasaan adalah pengaturan pribadi dan bisa disesuaikan, bukan rekomendasi medis otomatis.':'Habit targets are personal, adjustable settings, not automated medical advice.',
   'Data tersimpan di browser ini. Menghapus data browser dapat menghapus catatan.':'Your data is saved in this browser. Clearing browser data may delete your journal.',
   'Mulai mencatat':'Start tracking','Mulai perjalanan':'Start your journey',
+  'Perjalanan dijadwalkan':'Journey scheduled','Lihat pengaturan':'View settings',
+  'Targetmu sudah tersimpan. Catatan harian dan review baru tersedia pada tanggal mulai, sesuai zona waktu saat kamu mendaftar. Kembali besok atau muat ulang halaman.':'Your targets are saved. Daily entries and reviews become available on your start date, using the time zone from sign-up. Come back tomorrow or reload the page.',
+  'Pilih tanggal mulai paling lambat besok.':'Choose a start date no later than tomorrow.',
+  'Perjalanan dijadwalkan mulai besok.':'Your journey is scheduled to start tomorrow.',
   'Tanpa akun. Tanpa data contoh. Perjalananmu dimulai dari sini.':'No account. No sample data. Your journey starts here.',
   'Rata-rata mingguan':'Weekly average','Sementara':'Provisional','Minggu selesai':'Completed week','Minggu berjalan':'Week in progress','Minggu berjalan · sementara':'Week in progress · provisional','Mulai di sini':'Start here',
   'Data minggu sebelumnya. Minggu ini belum cukup catatan.':'Previous week’s data. This week does not have enough entries yet.',
@@ -134,6 +138,7 @@ export const messages = {
 };
 
 const templates = [
+  ['Mulai besok, {0}','Starts tomorrow, {0}'],
   ['Fokus pada satu fase. Estimasi durasi {0} sejak fase dimulai.','Focus on one phase. Estimated duration: {0} from the start of the phase.'],
   ['Disahkan saat rata-rata minggu selesai ≤ {0} kg.','Confirmed when a completed week’s average is ≤ {0} kg.'],
   ['Sisa {0} kg berdasarkan {1}.','{0} kg to go, based on {1}.'],
