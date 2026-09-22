@@ -44,7 +44,7 @@ dist/storage.js    IndexedDB dan proteksi konflik revision
 dist/i18n.js       Katalog terjemahan dan preferensi EN/IN
 dist/style.css    Layout mobile/desktop dan aksesibilitas
 dist/favicon.svg  Identitas aplikasi
-server.mjs        Server statis localhost:3040
+tools/dev-server.mjs  Server statis localhost:3040 (khusus lokal)
 tests/            Kasus penerimaan dan batas perhitungan
 ```
 
