@@ -210,7 +210,6 @@ const templates = [
   ['{0} hari terjawab · istirahat netral','{0} days answered · rest is neutral'],
   ['{0}/4 kebiasaan terisi','{0}/4 habits logged'],
   ['{0} g protein · {1} menit gerak','{0} g protein · {1} minutes of movement'],
-  ['{0} hari belum diketahui. Memenuhi minimum tidak berarti semua target harian tercapai.','{0} days not yet known. Meeting the minimum does not mean every daily target was met.'],
   ['Terbuka setelah rata-rata minggu selesai ≤ 75 kg. Saat mencapai 70 kg, penurunan sejak berat awal adalah {0} kg.','Unlocks when a completed week’s average is ≤ 75 kg. At 70 kg, the loss from your starting weight is {0} kg.'],
   ['Estimasi durasi fase: {0} sejak fase dimulai. Perkiraan, bukan tenggat.','Estimated phase duration: {0} from the start of the phase. An estimate, not a deadline.'],
   ['Estimasi sisa fase: {0} pada pace rencana 0,4–0,6 kg/minggu.','Estimated remaining time: {0} at the planned pace of 0.4–0.6 kg/week.'],
