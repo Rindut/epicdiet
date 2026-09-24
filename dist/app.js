@@ -56,6 +56,13 @@ document.addEventListener('click',event=>{
   if(event.target.closest('[data-wizard-back]')){const step=Number(document.querySelector('#onboard-form').dataset.step);if(step>0)showWizardStep(step-1);else document.querySelector('.health-toolbar [data-act="logout"]').click();}
   const button=event.target.closest('[data-unit-choice]');if(button){const card=button.closest('[data-measure-card]');card.dataset.unit=button.dataset.unitChoice;card.querySelectorAll('[data-unit-choice]').forEach(b=>b.setAttribute('aria-pressed',b===button));syncMeasure(button.dataset.unitField);}
 });
+// Numeric fields accept digits and one decimal separator only (physical keyboards ignore inputmode).
+document.addEventListener('input',event=>{
+  const el=event.target;if(!(el instanceof HTMLInputElement)||el.getAttribute('inputmode')!=='decimal')return;
+  const raw=el.value,caret=el.selectionStart??raw.length;let seen=false,clean='',removedBefore=0;
+  for(let i=0;i<raw.length;i++){const ch=raw[i];const keep=/\d/.test(ch)||((ch==='.'||ch===',')&&!seen&&(seen=true));if(keep)clean+=ch;else if(i<caret)removedBefore++;}
+  if(clean!==raw){el.value=clean;const pos=caret-removedBefore;try{el.setSelectionRange(pos,pos);}catch{}}
+},true);
 document.addEventListener('input',event=>{
   const name=event.target.dataset.measure;
   if(name){document.getElementById(name).value=event.target.value;syncMeasure(name);}
