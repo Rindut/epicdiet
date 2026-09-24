@@ -8,7 +8,7 @@ export const weekEnd = date => addDays(weekStart(date),6);
 export function todayIn(zone=Intl.DateTimeFormat().resolvedOptions().timeZone, now=new Date()) { const p=new Intl.DateTimeFormat('en-CA',{timeZone:zone,year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(now); return ['year','month','day'].map(k=>p.find(x=>x.type===k).value).join('-'); }
 export function validDate(s) { return /^\d{4}-\d{2}-\d{2}$/.test(s) && !Number.isNaN(new Date(`${s}T12:00:00Z`).getTime()) && new Date(`${s}T12:00:00Z`).toISOString().slice(0,10)===s; }
 export function parseNumber(value) { if (value===null || value===undefined || String(value).trim()==='') return null; const s=String(value).trim().replace(',','.'); return /^\d+(\.\d+)?$/.test(s) && Number.isFinite(Number(s)) ? Number(s) : NaN; }
-export const fmt = (v,d=1) => v===null || v===undefined ? '—' : Number(v).toLocaleString('id-ID',{minimumFractionDigits:d,maximumFractionDigits:d});
+export const fmt = (v,d=1) => v===null || v===undefined ? '—' : Number(v).toLocaleString('id-ID',{minimumFractionDigits:d,maximumFractionDigits:Math.max(d,2)});
 export const pct = x => x===null ? '—' : `${Math.round(x*100)}%`;
 export const formatDate = (date,opts={day:'numeric',month:'short',year:'numeric'}) => new Intl.DateTimeFormat('id-ID',{...opts,timeZone:'UTC'}).format(new Date(`${date}T12:00:00Z`));
 export const period = ws => `${formatDate(ws,{day:'numeric',month:'short'})} – ${formatDate(addDays(ws,6))}`;
@@ -24,7 +24,7 @@ export function validateEntry(raw,profile,today) {
   const errors={}, e=blankEntry(raw.localDate);
   if(!validDate(raw.localDate)||raw.localDate<profile.startDate||raw.localDate>today) errors.localDate='Pilih tanggal dari awal perjalanan sampai hari ini.';
   for(const key of ['weightKg','proteinG']) { const value=parseNumber(raw[key]); if(value!==null&&(!Number.isFinite(value)||(key==='weightKg'?value<=0:value<0))) errors[key]=key==='weightKg'?'Berat harus angka lebih dari 0.':'Protein harus angka 0 atau lebih.'; e[key]=value; }
-  if(e.weightKg!==null&&Number.isFinite(e.weightKg)) e.weightKg=Math.round(e.weightKg*10)/10;
+  if(e.weightKg!==null&&Number.isFinite(e.weightKg)) e.weightKg=Math.round(e.weightKg*100)/100;
   if(e.weightKg!==null&&e.weightKg<=0) errors.weightKg='Berat harus minimal 0,1 kg.';
   for(const [k,allowed] of Object.entries({nutrition:['green','yellow','red'],movement:['achieved','not_yet'],strength:['done','not_today']})) {e[k]=raw[k]||null;if(e[k]!==null&&!allowed.includes(e[k])) errors[k]='Pilih salah satu jawaban yang tersedia.';}
   e.note=String(raw.note||'').trim(); if(e.note.length>500) errors.note='Catatan maksimal 500 karakter.';
@@ -52,7 +52,7 @@ export function weeklyBase(state,ws,today) {
   const end=addDays(ws,6);const dates=Array.from({length:7},(_,i)=>addDays(ws,i));const eligible=dates.filter(d=>d>=state.profile.startDate&&d<=today);
   const entries=eligible.map(d=>state.entries[d]).filter(Boolean);const weights=entries.filter(e=>Number.isFinite(e.weightKg)&&e.weightKg>0);
   // Store entered weight in decigrams to avoid floating point boundary surprises.
-  const average=weights.length>=3?weights.reduce((s,e)=>s+Math.round(e.weightKg*10),0)/(weights.length*10):null;
+  const average=weights.length>=3?weights.reduce((s,e)=>s+Math.round(e.weightKg*100),0)/(weights.length*100):null;
   const coverage=Object.fromEntries(FIELDS.map(k=>[k,entries.filter(e=>e[k]!=null).length]));
   const green=entries.filter(e=>e.nutrition==='green').length,yellow=entries.filter(e=>e.nutrition==='yellow').length,red=entries.filter(e=>e.nutrition==='red').length;
   const protein=entries.filter(e=>e.proteinG!=null&&e.proteinG>=targetAt(state,e.localDate).proteinG).length;
