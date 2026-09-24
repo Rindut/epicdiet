@@ -37,7 +37,7 @@
 .auth-screen{width:min(100%,480px);padding:28px 20px;margin:0 auto}
 .auth-screen .onboarding-header{margin-bottom:48px}.auth-card h1{font-size:28px;margin:12px 0}.auth-card>p{margin-bottom:26px}.auth-card form{margin-top:24px}
 .account-card{display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap}.account-card>div{flex:1;min-width:200px}.account-card p{margin-top:6px}
-.wizard{max-width:520px;margin:24px auto;padding:0 20px}
+.wizard{max-width:520px;margin:12px auto;padding:18px 26px 10px;background:#fff;border:1px solid #e1e6e3;border-radius:32px;box-shadow:0 10px 30px rgba(31,52,45,.08)}
 .wizard .onboarding-header{margin-bottom:24px}
 .wizard form{display:flex;flex-direction:column;min-height:calc(100svh - 125px)}
 .wizard-progress{display:flex;justify-content:center;gap:8px;margin:8px 0 22px}
@@ -45,17 +45,18 @@
 .wizard-progress span[aria-current]{background:var(--deep)}
 .wizard-progress span.done{background:#a6d4c6}
 .wizard-step[hidden]{display:none}
-.wizard-step h1{text-align:center;font-size:28px;max-width:320px;margin:8px auto 12px;outline:none}
-.wizard-kicker{text-align:center;font-size:11px;letter-spacing:2px;color:var(--muted)}
-.wizard-hint{text-align:center;color:var(--muted);font-size:13px;margin:8px 0 20px}
-.measure-card{border-radius:30px;padding:28px 24px 20px;margin:30px 0 18px;text-align:center}
+.wizard-step h1{text-align:left;font-size:28px;max-width:100%;margin:8px 0 12px;outline:none}
+.wizard-kicker{text-align:left;font-size:11px;letter-spacing:2px;color:var(--muted)}
+.wizard-hint{text-align:left;color:var(--muted);font-size:13px;margin:8px 0 20px}
+.basic-detail-fields{display:grid;gap:14px}.wizard-field-label{display:block;color:var(--muted);font-size:13px;margin-bottom:-16px;position:relative;z-index:1;padding:0 18px}.basic-detail-fields .measure-card{margin-top:0}
+.measure-card{border-radius:22px;padding:22px 18px 16px;margin:24px 0 14px;text-align:center;border:1px solid #edf0ee}
 .measure-card.warm{background:#f7f3bc}.measure-card.cool{background:#d5ebe6}
 .measure-card>label{font-size:13px;color:var(--muted)}
 .measure-card>input:not([type=range]){display:block;width:100%;border:0;background:transparent;text-align:center;font-size:68px;line-height:1.2;letter-spacing:-3px;color:var(--ink);padding:10px 0;min-width:0}
 .measure-unit{font-size:16px;font-weight:650}
 .ruler{height:25px;margin-top:24px;background:repeating-linear-gradient(to right,transparent 0,transparent 11px,#7f978066 11px,#7f978066 12px)}
 .measure-card input[type=range]{display:block;width:100%;height:44px;accent-color:var(--deep);cursor:ew-resize}
-.wizard-actions{position:sticky;bottom:0;display:flex;gap:14px;margin-top:auto;padding:18px 0 10px;background:var(--bg,#f5f7f5);z-index:5}
+.wizard-actions{position:sticky;bottom:0;display:flex;gap:14px;margin-top:18px;padding:10px 0 6px;background:var(--bg,#f5f7f5);z-index:5}
 .wizard-actions .btn{min-height:52px;border-radius:16px}.wizard-back{min-width:54px;padding:12px}.wizard-next{flex:1}
 .wizard-privacy{text-align:center;font-size:11px;color:var(--muted);padding:0 0 max(12px,env(safe-area-inset-bottom))}
 .goal-options{border:0;margin:16px 0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -67,7 +68,7 @@
 .wizard-habits{border:1px solid var(--line);border-radius:14px;padding:10px 14px;background:#fff;margin-bottom:12px}
 .wizard-habits summary{display:flex;align-items:center;justify-content:space-between;font-size:14px;font-weight:650}.wizard-habits[open] summary{margin-bottom:14px}
 .wizard .error{color:var(--red);font-size:13px}.wizard .error:not(:empty){margin-top:8px}
-@media(max-width:380px){.wizard{padding:0 16px;margin-top:16px}.wizard .brand{font-size:20px}.wizard .onboarding-header{gap:8px}.wizard-step h1{font-size:25px}.measure-card{margin-top:18px;padding:20px}.wizard-actions .btn{font-size:13px}}
+@media(max-width:620px){.wizard{width:calc(100% - 24px);margin:12px auto;padding:16px 22px 8px;border-radius:28px}.wizard .brand{font-size:20px}.wizard .onboarding-header{gap:8px}.wizard-step h1{font-size:26px}.measure-card{margin-top:18px;padding:20px 16px}.wizard-actions .btn{font-size:13px}}
 .onboard-copy>p,.onboard-copy>.note-box{display:none}
 .onboard-form>.eyebrow{display:block;margin-bottom:8px}
 .onboard-form-intro{margin:8px 0 24px}
@@ -110,6 +111,39 @@
 .journey-marker.current{width:22px;height:22px;background:#244b3e;border:5px solid #fff;box-shadow:0 0 0 3px #244b3e}
 .journey-marker.current::after{content:'';position:absolute;inset:3px;border-radius:50%;background:#fff}
 .journey-marker.future{background:#fff;box-shadow:0 0 0 2px #b8c7bd}
+/* Reference-style onboarding. All overrides are scoped to this screen. */
+body:has(.health-onboarding){background:#eef0f1}
+.health-onboarding.wizard{--ink:#30313d;--muted:#7e818c;--green:#1d4227;--deep:#173721;font-family:Arial,Helvetica,sans-serif;width:100%;max-width:480px;margin:0 auto;padding:12px 12px max(16px,env(safe-area-inset-bottom));min-height:100svh;min-height:100dvh;display:flex;flex-direction:column;border:0;border-radius:24px;background:#fff;box-shadow:none;color:var(--ink)}
+.health-toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:clamp(20px,4svh,32px);flex-shrink:0}
+.health-toolbar button,.health-menu summary{border:0;background:none;color:var(--ink);min-height:34px;min-width:38px;display:flex;align-items:center;justify-content:center;padding:6px;cursor:pointer}
+.health-toolbar .health-back{background:#f7f8f9;border-radius:999px;width:44px}.health-back .icon{transform:rotate(180deg);width:20px}
+.health-toolbar-right{display:flex;align-items:center;background:#f7f8f9;border-radius:999px;padding:0 3px}.health-toolbar .icon{width:19px;height:19px}.health-toolbar-divider{height:11px;width:1px;background:#e2e4e6}
+.health-menu{position:relative}.health-menu summary{color:#818591;font-size:12px;letter-spacing:1px}.health-menu-content{position:absolute;right:0;top:42px;z-index:10;padding:5px;border-radius:14px;background:#fff;box-shadow:0 6px 24px #30313d22}
+.health-onboarding #onboard-form{min-height:0;flex:1;display:flex;flex-direction:column}
+.health-onboarding .wizard-progress,.health-onboarding .wizard-kicker{display:none}
+.health-onboarding .wizard-step h1{font-family:inherit;font-size:28px;line-height:1.24;letter-spacing:-1px;font-weight:700;max-width:270px;margin:0 0 10px}
+.health-onboarding .wizard-hint{font-size:16px;line-height:1.35;margin:0;color:#737783;letter-spacing:-.35px}
+.health-measures{display:grid;gap:clamp(22px,4svh,36px);margin-top:clamp(22px,4svh,36px)}
+.health-measure-head{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:14px;color:#818590}
+.measure-units{display:flex;background:#f6f7f8;border-radius:999px;padding:2px;width:148px;flex-shrink:0}
+.measure-units button{font-size:14px;border:0;border-radius:999px;color:#80848f;background:none;min-height:30px;flex:1;padding:4px 10px;cursor:pointer}
+.measure-units button[aria-pressed=true]{color:#343640;background:#fff;box-shadow:0 1px 3px #33333326}
+.health-measure-value{display:flex;align-items:baseline;justify-content:center;gap:4px;margin:14px 0 12px;color:#a0a4ad;font-size:16px;font-weight:600}
+.health-measure-value input{font:700 26px/1.2 Arial,Helvetica,sans-serif;color:var(--ink);letter-spacing:-.7px;width:4ch;text-align:right;min-width:0;padding:0;border:0;background:transparent;border-radius:4px}
+.health-ruler{height:72px;position:relative;isolation:isolate}
+.health-ticks{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.health-tick{position:absolute;top:0;width:1px;height:32px;background:#e9ebed;transform:translateX(-50%)}
+.health-tick.major{height:42px}.health-tick small{position:absolute;top:56px;left:0;transform:translateX(-50%);font:12px/1 Arial,Helvetica,sans-serif;color:#9ba0a8}
+.health-marker{position:absolute;top:0;bottom:0;left:50%;width:3px;border-radius:3px;background:#45c537;transform:translateX(-50%);pointer-events:none;z-index:2}
+.health-ruler input[type=range]{position:absolute;inset:0;margin:0;width:100%;height:100%;opacity:0;cursor:ew-resize;z-index:3;touch-action:pan-y}
+.health-ruler:focus-within{outline:2px solid #1d4227;outline-offset:4px;border-radius:4px}
+.health-blood{margin-top:clamp(24px,4.5svh,40px)}.health-blood>label{display:block;color:#818590;font-size:14px;margin-bottom:10px}
+.health-blood select{appearance:none;border-radius:999px;min-height:46px;padding:10px 36px 10px 20px;border:1px solid #e8e9eb;font-size:14px;color:var(--ink);background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' fill='none' stroke='%2330313d' stroke-width='1.6'%3E%3Cpath d='m4 6 5 5 5-5'/%3E%3C/svg%3E") no-repeat right 18px center}
+.health-onboarding .wizard-actions{position:static;margin-top:auto;padding:clamp(24px,5svh,44px) 0 0;background:#fff;flex-shrink:0}
+.health-onboarding .wizard-actions .btn{min-height:50px;border-radius:999px;font:600 16px/1.2 Arial,Helvetica,sans-serif;width:100%;padding:12px 16px;background:#1d4227;border-color:#1d4227;color:white}
+.health-onboarding .goal-options{margin-top:28px}.health-onboarding .goal-options label,.health-onboarding .input,.health-onboarding .wizard-habits{border-color:#e8e9eb;border-radius:24px}.health-onboarding .wizard-step:not(.basic-details) .wizard-hint{margin-bottom:22px}
+@media(min-width:621px){.health-onboarding.wizard{margin:16px auto;min-height:min(800px,calc(100svh - 32px));padding:16px 18px 20px}}
+@media(max-height:720px){.health-onboarding.wizard{padding-top:8px;padding-bottom:12px}.health-toolbar{margin-bottom:18px}.health-onboarding .wizard-step h1{font-size:26px}.health-onboarding .wizard-hint{font-size:14px}.health-measures{margin-top:20px;gap:20px}.health-measure-value{margin:10px 0}.health-ruler{height:60px}.health-tick{height:26px}.health-tick.major{height:34px}.health-tick small{top:47px}.health-blood{margin-top:24px}.health-onboarding .wizard-actions{padding-top:24px}}
 .journey-captions{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));margin:1px -5px 0;text-align:center;font-size:9px;line-height:1.25;color:var(--muted)}
 .journey-captions strong{color:#247d5d;font-weight:750}
 @media(max-width:620px){.journey-track{margin-top:4px}.journey-captions{font-size:8px}.journey-marker.next{width:22px;height:22px}}

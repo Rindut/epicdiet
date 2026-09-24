@@ -32,6 +32,7 @@ export function validateEntry(raw,profile,today) {
   return {entry:e,errors};
 }
 export function validateProfile(raw,today) {
+  if(raw.bloodType!=null&&raw.bloodType!==''&&!['A+','A-','B+','B-','AB+','AB-','O+','O-'].includes(raw.bloodType))return {bloodType:'Pilih golongan darah yang tersedia.'};
   const errors={}; for(const key of ['baselineKg','heightCm','proteinG','movementMinutes','strengthSessions']){const n=parseNumber(raw[key]);if(n===null||!Number.isFinite(n)||n<=0)errors[key]='Isi angka lebih dari 0.';raw[key]=n;}
   if(raw.baselineKg!==null&&raw.baselineKg<40)errors.baselineKg='Berat awal perjalanan ini harus minimal 40 kg.';
   if(raw.strengthSessions!==null&&(!Number.isInteger(raw.strengthSessions)||raw.strengthSessions>7))errors.strengthSessions='Pilih 1–7 sesi per minggu.';
@@ -100,7 +101,7 @@ export function journey(state,today) {
 export function duration(kg){return `${Math.ceil(Math.max(0,kg)/.6)}–${Math.ceil(Math.max(0,kg)/.4)} minggu`;}
 export function csvCell(value,isText=false) { if(value===null||value===undefined)return '""';let s=String(value);if(isText&&/^[\s\u0000-\u001f]*[=+@-]/.test(s))s="'"+s;return '"'+s.replaceAll('"','""')+'"'; }
 export function exportCsv(state) {
-  const headers=['recordType','localDate','weightKg','nutrition','proteinG','movement','strength','note','effectiveDate','movementMinutes','strengthSessions','startDate','baselineKg','heightCm','timeZone','longTermGoalKg','weekStart','reflection','decisionDate','optionalPhaseChoice','schemaVersion'];
+  const headers=['recordType','localDate','weightKg','nutrition','proteinG','movement','strength','note','effectiveDate','movementMinutes','strengthSessions','startDate','baselineKg','heightCm','timeZone','longTermGoalKg','weekStart','reflection','decisionDate','optionalPhaseChoice','schemaVersion','bloodType'];
   const rows=[{recordType:'profile',...state.profile},{recordType:'meta',schemaVersion:state.meta.schemaVersion},...Object.values(state.entries).sort((a,b)=>a.localDate.localeCompare(b.localDate)).map(e=>({recordType:'daily',...e})),...state.targets.map(t=>({recordType:'target',...t})),...Object.entries(state.reflections).map(([weekStart,r])=>({recordType:'reflection',weekStart,reflection:r.text})),...(state.decision?[{recordType:'decision',...state.decision}]:[])];
   return '\ufeff'+headers.join(',')+'\r\n'+rows.map(row=>headers.map(h=>csvCell(row[h],['note','reflection'].includes(h))).join(',')).join('\r\n');
 }

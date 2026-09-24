@@ -1,6 +1,11 @@
 // UI-only localisation. Stored enums, dates, measurements, exports and user text
 // are never translated. Indonesian is the canonical source for existing views.
 export const messages = {
+  'Berat':'Weight',
+  'Pilih golongan darah yang tersedia.':'Select an available blood type.',
+  'Informasi dasar kesehatanmu':'Share your basic health details',
+  'Masukkan data yang paling akurat untukmu.':'Give the info that feels most accurate for you.',
+  'Golongan darah':'Blood Type','Belum tahu':'Not sure','Bahasa':'Language',
   'Selamat datang kembali':'Welcome back','Masuk untuk melanjutkan perjalananmu.':'Sign in to continue your journey.','Masuk':'Sign in','Keluar':'Sign out',
   'Akun pribadi. Tidak ada pendaftaran publik.':'Private account. Public registration is not available.',
   'Akun pribadi':'Private account','Muat ulang catatan':'Reload entries',
@@ -27,7 +32,7 @@ export const messages = {
   'Apa targetmu?':'What is your goal?','Pilih tujuan, lalu mulai dengan langkah kecil.':'Choose your goal and start with a small step.',
   'Selesai di Epic 3':'Finish after Epic 3','Evaluasi ulang di 65 kg':'Reassess at 65 kg',
   'Target kebiasaan harian':'Daily habit targets','Target pribadi, bisa diubah di Profil.':'Personal targets, editable in Profile.',
-  'Langkah sebelumnya':'Previous step','Lanjut':'Next','Data tersimpan di browser ini.':'Data is saved in this browser.',
+  'Langkah sebelumnya':'Previous step','Lanjut':'Continue','Data tersimpan di browser ini.':'Data is saved in this browser.',
   'Ke konten utama':'Skip to main content',
   'Membuka catatan kamu…':'Opening your journal…',
  'Catatan Harian':'Daily Tracker','Review Mingguan':'Weekly Review','Mingguan':'Weekly Review','Pengaturan':'Profile','Profil':'Profile',

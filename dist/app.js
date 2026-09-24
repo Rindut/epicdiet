@@ -1,6 +1,7 @@
 import * as C from './core.js';
 import * as DB from './storage.js';
 import {askLogin} from './auth.js';
+import {measureUnits,displayMeasure,canonicalMeasure,rulerTicks} from './measurements.js';
 let account=null;
 import {switcher, installLanguageSwitcher} from './i18n.js';
 installLanguageSwitcher();
@@ -26,45 +27,48 @@ function journeyVisual(value){const current=journeyIndex(value),next=current<4?c
 function currentJourneyWeight(){const latest=Object.values(state.entries).filter(e=>e.localDate<=today()&&Number.isFinite(e.weightKg)).sort((a,b)=>b.localDate.localeCompare(a.localDate))[0];return latest?.weightKg??state.profile.baselineKg;}
 function onboarding(){
   const d=today();
-  const measure=(name,label,value,unit,min,max,step,tone)=>`<div class="measure-card ${tone}"><label for="${name}">${label}</label><input id="${name}" name="${name}" inputmode="decimal" value="${value}" aria-describedby="${name}-error"><span class="measure-unit">${unit}</span><div class="ruler" aria-hidden="true"></div><input type="range" data-measure="${name}" aria-label="${label}" min="${min}" max="${max}" step="${step}" value="${value}"><p class="error" id="${name}-error"></p></div>`;
-  return `<main id="main" class="onboarding wizard"><header class="onboarding-header">${brand()}${switcher()}</header>
+  const measure=(name,label,value,unit,min,max,step)=>`<div class="health-measure" data-measure-card="${name}" data-unit="${unit}"><div class="health-measure-head"><label for="${name}-display">${label}</label><div class="measure-units" role="group" aria-label="${label}">${(name==='baselineKg'?[['kg','Kg'],['lb','Pound']]:[['ft','Feet'],['cm','Cm']]).map(([u,l])=>`<button type="button" data-unit-choice="${u}" data-unit-field="${name}" aria-pressed="${u===unit}" translate="no">${l}</button>`).join('')}</div></div><input type="hidden" id="${name}" name="${name}" value="${value}"><div class="health-measure-value"><input id="${name}-display" data-measure-display="${name}" inputmode="decimal" value="${value}" aria-describedby="${name}-error"><span data-measure-unit translate="no">${unit}</span></div><div class="health-ruler"><div class="health-ticks" aria-hidden="true">${rulerMarkup(value,name,unit)}</div><span class="health-marker" aria-hidden="true"></span><input type="range" data-measure="${name}" aria-label="${label}" min="${min}" max="${max}" step="${step}" value="${value}"></div><p class="error" id="${name}-error" role="alert"></p></div>`;
+  return `<main id="main" class="onboarding wizard health-onboarding"><header class="health-toolbar"><button class="health-back" type="button" data-wizard-back aria-label="Langkah sebelumnya">${icon('arrow')}</button><div class="health-toolbar-right"><details class="health-menu"><summary aria-label="Bahasa"><span aria-hidden="true">•••</span></summary><div class="health-menu-content">${switcher()}</div></details><span class="health-toolbar-divider"></span><button type="button" data-act="logout" aria-label="Keluar">${icon('x')}</button></div></header>
   <form id="onboard-form" novalidate data-step="0">
-    <div class="wizard-progress" aria-label="Progres profil awal"><span aria-current="step"></span><span></span><span></span></div>
+    <div class="wizard-progress" aria-label="Progres profil awal"><span aria-current="step"></span><span></span></div>
     <div id="form-error" class="error-banner" role="alert">${esc(loadError)}</div>
-    <section class="wizard-step" data-step-panel="0"><p class="wizard-kicker">01 / 03</p><h1 tabindex="-1">Berapa berat badanmu?</h1><p class="wizard-hint">Berat awal perjalananmu</p>${measure('baselineKg','Berat awal',82,'kg',40,200,.1,'warm')}<p class="wizard-hint">Geser untuk memilih, atau ketuk angka untuk mengetik.</p></section>
-    <section class="wizard-step" data-step-panel="1" hidden><p class="wizard-kicker">02 / 03</p><h1 tabindex="-1">Berapa tinggi badanmu?</h1><p class="wizard-hint">Lengkapi profil pribadimu</p>${measure('heightCm','Tinggi',156,'cm',100,230,1,'cool')}<p class="wizard-hint">Geser untuk memilih, atau ketuk angka untuk mengetik.</p></section>
-    <section class="wizard-step" data-step-panel="2" hidden><p class="wizard-kicker">03 / 03</p><h1 tabindex="-1">Apa targetmu?</h1><p class="wizard-hint">Pilih tujuan, lalu mulai dengan langkah kecil.</p>
+    <section class="wizard-step basic-details" data-step-panel="0"><h1 tabindex="-1">Informasi dasar kesehatanmu</h1><p class="wizard-hint">Masukkan data yang paling akurat untukmu.</p><div class="health-measures">${measure('baselineKg','Berat',82,'kg',40,200,.1)}${measure('heightCm','Tinggi',156,'cm',100,230,1)}</div></section>
+    <section class="wizard-step" data-step-panel="1" hidden><p class="wizard-kicker">02 / 02</p><h1 tabindex="-1">Apa targetmu?</h1><p class="wizard-hint">Pilih tujuan, lalu mulai dengan langkah kecil.</p>
       <fieldset class="goal-options"><legend>Target jangka panjang</legend>
       <label><input type="radio" name="longTermGoalKg" value="65"><span><strong>65 kg</strong><small>Selesai di Epic 3</small></span>${icon('check')}</label>
       <label><input type="radio" name="longTermGoalKg" value="60" checked><span><strong>60 kg</strong><small>Evaluasi ulang di 65 kg</small></span>${icon('check')}</label></fieldset><p class="error" id="longTermGoalKg-error"></p>
       ${inputField('Tanggal mulai','startDate',d,{type:'date',attrs:`max="${C.addDays(d,1)}" required`})}
       <details class="wizard-habits"><summary>Target kebiasaan harian ${icon('chevron')}</summary><div class="form-grid">${inputField('Protein / hari','proteinG',90,{unit:'g'})}${inputField('Gerak / hari','movementMinutes',30,{unit:'mnt'})}</div>${inputField('Latihan kekuatan / minggu','strengthSessions',3,{unit:'sesi'})}<p class="small muted">Target pribadi, bisa diubah di Profil.</p></details>
     </section>
-    <footer class="wizard-actions"><button type="button" class="btn wizard-back" data-wizard-back disabled aria-label="Langkah sebelumnya">${icon('left')}</button><button type="submit" class="btn primary wizard-next">Lanjut ${icon('right')}</button></footer>
-    <p class="wizard-privacy">Catatan tersimpan di akun setelah kamu menekan Simpan.</p>
+    <footer class="wizard-actions"><button type="submit" class="btn primary wizard-next">Lanjut</button></footer>
   </form></main>`;
 }
 function showWizardStep(step){
   const form=document.querySelector('#onboard-form');form.dataset.step=step;
   form.querySelectorAll('[data-step-panel]').forEach((panel,i)=>panel.hidden=i!==step);
   form.querySelectorAll('.wizard-progress span').forEach((el,i)=>{el.classList.toggle('done',i<step);if(i===step)el.setAttribute('aria-current','step');else el.removeAttribute('aria-current');});
-  form.querySelector('[data-wizard-back]').disabled=step===0;
-  form.querySelector('.wizard-next').innerHTML=(step===2?'Simpan & buka Dashboard':'Lanjut')+icon('right');
+  form.querySelector('.wizard-next').textContent=step===1?'Simpan & buka Dashboard':'Lanjut';
   form.querySelector(`[data-step-panel="${step}"] h1`).focus();window.scrollTo(0,0);
 }
-document.addEventListener('click',event=>{if(event.target.closest('[data-wizard-back]'))showWizardStep(Number(document.querySelector('#onboard-form').dataset.step)-1);});
+function rulerMarkup(value,name,unit){return rulerTicks(value,name,unit).map(t=>`<span class="health-tick ${t.major?'major':''}" style="left:${t.position}%">${t.major?`<small>${t.label}</small>`:''}</span>`).join('');}
+function syncMeasure(name,updateDisplay=true){const card=document.querySelector(`[data-measure-card="${name}"]`);if(!card)return;const value=document.getElementById(name).value,unit=card.dataset.unit;card.querySelector('[data-measure-unit]').textContent=measureUnits[name][unit].label;card.querySelector('[data-measure]').value=value;card.querySelector('.health-ticks').innerHTML=rulerMarkup(value,name,unit);if(updateDisplay)card.querySelector('[data-measure-display]').value=displayMeasure(value,name,unit);}
+document.addEventListener('click',event=>{
+  if(event.target.closest('[data-wizard-back]')){const step=Number(document.querySelector('#onboard-form').dataset.step);if(step>0)showWizardStep(step-1);else document.querySelector('.health-toolbar [data-act="logout"]').click();}
+  const button=event.target.closest('[data-unit-choice]');if(button){const card=button.closest('[data-measure-card]');card.dataset.unit=button.dataset.unitChoice;card.querySelectorAll('[data-unit-choice]').forEach(b=>b.setAttribute('aria-pressed',b===button));syncMeasure(button.dataset.unitField);}
+});
 document.addEventListener('input',event=>{
   const name=event.target.dataset.measure;
-  if(name)document.getElementById(name).value=event.target.value;
+  if(name){document.getElementById(name).value=event.target.value;syncMeasure(name);}
+  else if(event.target.dataset.measureDisplay){const field=event.target.dataset.measureDisplay,card=event.target.closest('[data-measure-card]'),raw=event.target.value;document.getElementById(field).value=raw.trim()===''?'':canonicalMeasure(raw,field,card.dataset.unit);syncMeasure(field,false);}
   else if(['baselineKg','heightCm'].includes(event.target.id)){const slider=document.querySelector(`[data-measure="${event.target.id}"]`);if(slider)slider.value=C.parseNumber(event.target.value);}
 });
 document.addEventListener('submit',event=>{
   if(event.target.id!=='onboard-form')return;
   const form=event.target,step=Number(form.dataset.step),raw=Object.fromEntries(new FormData(form)),errors=C.validateProfile(raw,today());
-  const names=step===0?['baselineKg']:step===1?['heightCm']:Object.keys(errors);
+  const names=step===0?['baselineKg','heightCm']:Object.keys(errors);
   const relevant=Object.fromEntries(Object.entries(errors).filter(([name])=>names.includes(name)));
-  if(step<2||Object.keys(relevant).length){event.preventDefault();event.stopImmediatePropagation();setErrors(relevant);
-    if(Object.keys(relevant).length){if(step===2){const field=form.querySelector(`[name="${Object.keys(relevant)[0]}"]`);if(field?.closest('details'))field.closest('details').open=true;field?.focus();}}
+  if(step<1||Object.keys(relevant).length){event.preventDefault();event.stopImmediatePropagation();setErrors(relevant);
+    if(Object.keys(relevant).length){if(step===1){const field=form.querySelector(`[name="${Object.keys(relevant)[0]}"]`);if(field?.closest('details'))field.closest('details').open=true;field?.focus();}}
     else showWizardStep(step+1);
   }
 },true);
