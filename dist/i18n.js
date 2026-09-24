@@ -83,7 +83,6 @@ export const messages = {
   'Berat badan':'Body weight','Opsional':'Optional','Tidak harus menimbang setiap hari.':'You don’t have to weigh yourself every day.',
   'Penjelasan target nutrisi':'Nutrition target details','Penjelasan target protein':'Protein target details','Penjelasan target gerak':'Movement target details','Penjelasan target latihan kekuatan':'Strength training target details',
   'Hijau':'Green','Kuning':'Yellow','Merah':'Red','Sesuai rencana':'Followed the plan','Sebagian besar sesuai':'Mostly followed the plan','Jauh dari rencana':'Well outside the plan',
-  'Hijau: sesuai rencana makan pribadimu. Kuning: sebagian besar sesuai, ada penyimpangan kecil. Merah: jauh dari rencana. Hijau dan kuning memenuhi minimum MVD; skor nutrisi berbeda (1 dan 0,5). Aplikasi tidak membuat meal plan.':'Green: you followed your personal meal plan. Yellow: mostly followed it, with small deviations. Red: well outside the plan. Green and yellow count towards MVD, but their nutrition scores differ (1 and 0.5). The app does not create a meal plan.',
   'Ketuk pilihan aktif sekali lagi untuk mengosongkan.':'Tap the selected option again to clear it.',
   'Kosong berarti belum dicatat.':'An empty field means not logged yet.','Isi jumlah protein dalam gram.':'Enter the amount of protein in grams.','Target protein tercapai.':'Protein target met.',
   'Belum':'Not yet','Tidak hari ini':'Not today','Latihan kekuatan':'Strength training',
