@@ -14,7 +14,7 @@ const icon=(n,extra='')=>`<svg class="icon ${extra}" viewBox="0 0 24 24" aria-hi
 const btn=(label,action,kind='',extra='')=>`<button type="button" class="btn ${kind}" data-act="${action}" ${extra}>${label}</button>`;
 const badge=(label,kind='',ico='')=>`<span class="badge ${kind}">${ico?icon(ico):''}${label}</span>`;
 const bar=p=>`<div class="bar" ${p===null?'':`role="progressbar" aria-label="Progress" aria-valuenow="${Math.round(p*100)}" aria-valuemin="0" aria-valuemax="100"`}><span style="width:${p===null?0:Math.min(100,p*100)}%"></span></div>`;
-const brand=()=>`<div class="brand"><div class="brand-mark">${icon('flag')}</div><span>epic<small>Diet tracker</small></span></div>`;
+const brand=()=>`<div class="brand"><div class="brand-mark">${icon('flag')}</div><span>mulaiyuk<small>Diet tracker</small></span></div>`;
 const today=()=>C.todayIn(state?.profile?.timeZone);
 const tabs=[['dashboard','Dashboard','home'],['daily','Catatan Harian','calendar'],['weekly','Mingguan','chart'],['roadmap','Roadmap','map']];
 function nav(){return tabs.map(([id,label,i])=>`<a class="nav-link ${route===id?'active':''}" href="#${id}" ${route===id?'aria-current="page"':''} data-route="${id}">${icon(i)}<span>${label}</span></a>`).join('');}
