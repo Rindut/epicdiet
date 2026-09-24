@@ -13,9 +13,11 @@ export function createLocalStore(file=resolve('.local/server-data.json')) {
     cas:(key,revision,value)=>transaction(d=>{const current=d[key]?.value;const old=current?JSON.parse(current):null;if((old?.meta?.revision||0)!==revision)return false;d[key]={value,expires:null};return true;})
   };
 }
+// Accepts Upstash's own names or the KV_* names the Vercel Marketplace integration generates.
 export function createRedisStore(env=process.env){
-  if(!env.UPSTASH_REDIS_REST_URL?.startsWith('https://')||!env.UPSTASH_REDIS_REST_TOKEN)throw Error('Storage unavailable');
-  async function command(args){const response=await fetch(env.UPSTASH_REDIS_REST_URL,{method:'POST',headers:{Authorization:`Bearer ${env.UPSTASH_REDIS_REST_TOKEN}`,'Content-Type':'application/json'},body:JSON.stringify(args),signal:AbortSignal.timeout(10000)});if(!response.ok)throw Error('Storage unavailable');const body=await response.json();if(body.error)throw Error('Storage unavailable');return body.result;}
+  const url=env.UPSTASH_REDIS_REST_URL||env.KV_REST_API_URL,token=env.UPSTASH_REDIS_REST_TOKEN||env.KV_REST_API_TOKEN;
+  if(!url?.startsWith('https://')||!token)throw Error('Storage unavailable');
+  async function command(args){const response=await fetch(url,{method:'POST',headers:{Authorization:`Bearer ${token}`,'Content-Type':'application/json'},body:JSON.stringify(args),signal:AbortSignal.timeout(10000)});if(!response.ok)throw Error('Storage unavailable');const body=await response.json();if(body.error)throw Error('Storage unavailable');return body.result;}
   return {
     get:key=>command(['GET',key]),set:(key,value,ttl)=>command(['SET',key,value,...(ttl?['EX',ttl]:[])]),del:key=>command(['DEL',key]),
     limit:(key,seconds)=>command(['EVAL',"local n=redis.call('INCR',KEYS[1]); if n==1 then redis.call('EXPIRE',KEYS[1],ARGV[1]) end; return n",1,key,seconds]),

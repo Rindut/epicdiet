@@ -29,6 +29,10 @@ Configure these environment variables in the Vercel **Production** environment:
 | UPSTASH_REDIS_REST_URL | Database HTTPS REST URL |
 | UPSTASH_REDIS_REST_TOKEN | Database read/write REST token |
 
+The Vercel Marketplace Upstash integration generates `KV_REST_API_URL` and
+`KV_REST_API_TOKEN` instead. Those names are accepted as a fallback, so the
+`UPSTASH_*` pair is not required when the `KV_*` pair is present.
+
 Never add the password, hash, or Redis token to frontend files or Git.
 Preview deployments need their own exact origin and a separate test database.
 Production refuses the local adapter. Missing configuration fails closed.
