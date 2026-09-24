@@ -1,5 +1,14 @@
 # Epic Diet Tracker
 
+## Account and sync implementation
+
+The local development version now requires a private account. See
+[ACCOUNT_SETUP.md](ACCOUNT_SETUP.md) for setup, credentials, migration, and
+production prerequisites. Run `npm run setup-account` once before `npm run dev`.
+Cloud sync is not live until a persistent database and Vercel environment
+variables are configured. The previous browser-only notes below document the
+legacy data that is preserved for explicit migration.
+
 Tracker pribadi berdasarkan `weight-tracker-prd-v1.md` dan empat wireframe v2. UI Bahasa Indonesia dan English, responsif untuk mobile browser dan desktop.
 
 Switcher **EN / IN** di kanan atas tersedia pada onboarding dan semua halaman. IN berarti Bahasa Indonesia; kode bahasa internal tetap `id`. Pilihan tersimpan sebagai preferensi browser (`epic-language`). Pergantian bahasa berlangsung tanpa reload atau penggantian form, sehingga draft, posisi kursor, catatan pribadi dan target tersimpan tidak berubah. Label, tooltip, dialog, pesan validasi, angka tampilan dan tanggal antarmuka diterjemahkan; nilai input dan CSV tetap sesuai data asli.

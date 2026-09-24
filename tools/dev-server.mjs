@@ -2,11 +2,14 @@ import http from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+import api from '../server/api.mjs';
+try{const raw=await readFile(new URL('../.env.local',import.meta.url),'utf8');for(const line of raw.split('\n')){const m=line.match(/^([A-Z_]+)=(.*)$/);if(m&&!process.env[m[1]])process.env[m[1]]=m[2];}}catch(e){if(e.code!=='ENOENT')throw e;}
 const root = path.resolve(fileURLToPath(new URL('../dist/', import.meta.url)));
 const types = { '.html':'text/html; charset=utf-8', '.js':'text/javascript; charset=utf-8', '.css':'text/css; charset=utf-8', '.svg':'image/svg+xml' };
 const handleRequest = async (req,res) => {
   try {
     const url = new URL(req.url, 'http://localhost:3040');
+    if(url.pathname.startsWith('/api/'))return await api(req,res);
     const file = path.resolve(root, '.' + decodeURIComponent(url.pathname === '/' ? '/index.html' : url.pathname));
     if (!file.startsWith(root + path.sep)) { res.writeHead(403); res.end(); return; }
     const data = await readFile(file);

@@ -33,7 +33,7 @@ export function validateEntry(raw,profile,today) {
 }
 export function validateProfile(raw,today) {
   const errors={}; for(const key of ['baselineKg','heightCm','proteinG','movementMinutes','strengthSessions']){const n=parseNumber(raw[key]);if(n===null||!Number.isFinite(n)||n<=0)errors[key]='Isi angka lebih dari 0.';raw[key]=n;}
-  if(raw.baselineKg!==null&&Math.round(raw.baselineKg*10)/10<=75)errors.baselineKg='Berat awal perjalanan ini harus minimal 75,1 kg.';
+  if(raw.baselineKg!==null&&raw.baselineKg<40)errors.baselineKg='Berat awal perjalanan ini harus minimal 40 kg.';
   if(raw.strengthSessions!==null&&(!Number.isInteger(raw.strengthSessions)||raw.strengthSessions>7))errors.strengthSessions='Pilih 1–7 sesi per minggu.';
   if(!validDate(raw.startDate)||raw.startDate>addDays(today,1))errors.startDate='Pilih tanggal mulai paling lambat besok.';
   if(![60,65].includes(Number(raw.longTermGoalKg)))errors.longTermGoalKg='Pilih 60 atau 65 kg.';

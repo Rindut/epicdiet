@@ -1,8 +1,18 @@
-import {initialState} from './core.js';
-let database;
-async function openDB(){if(database)return database;database=await new Promise((resolve,reject)=>{const req=indexedDB.open('epic-diet-tracker',1);req.onupgradeneeded=()=>req.result.createObjectStore('journey');req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error);req.onblocked=()=>reject(new Error('Tutup tab tracker lain lalu coba lagi.'));});database.onversionchange=()=>{database.close();database=null;};return database;}
-export async function load(){const db=await openDB();return new Promise((resolve,reject)=>{const tx=db.transaction('journey','readonly');const r=tx.objectStore('journey').get('state');r.onsuccess=()=>resolve(r.result||initialState());r.onerror=()=>reject(r.error);});}
-// A single IndexedDB record makes profile, entries, targets and cache atomic.
-// Revision check prevents another tab from silently overwriting a newer save.
-export async function save(state){const db=await openDB();return new Promise((resolve,reject)=>{const tx=db.transaction('journey','readwrite');const store=tx.objectStore('journey');let next;let conflict=false;const r=store.get('state');r.onsuccess=()=>{if((r.result?.meta?.revision||0)!==(state.meta.revision||0)){conflict=true;tx.abort();return;}next=structuredClone(state);next.meta.revision=(state.meta.revision||0)+1;store.put(next,'state');};tx.oncomplete=()=>resolve(next);tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(conflict?new Error('Catatan berubah di tab lain. Muat ulang sebelum menyimpan; isian kamu tetap tersedia untuk disalin.'):tx.error||new Error('Penyimpanan dibatalkan.'));});}
-export async function clear(){const db=await openDB();return new Promise((resolve,reject)=>{const tx=db.transaction('journey','readwrite');tx.objectStore('journey').clear();tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error);});}
+import {load as legacyLoad} from './legacy-storage.js';
+let requireLogin=null;
+export function onLoginRequired(callback){requireLogin=callback;}
+async function request(path,method='GET',data,retry=true){
+  let response;
+  try{response=await fetch(path,{method,credentials:'same-origin',cache:'no-store',headers:data?{'Content-Type':'application/json'}:{},body:data?JSON.stringify(data):undefined});}
+  catch{throw Error('Tidak ada koneksi. Isian belum tersimpan; coba lagi setelah online.');}
+  let body;try{body=await response.json();}catch{throw Error('Server akun belum tersedia.');}
+  if(response.status===401&&retry&&requireLogin){await requireLogin();return request(path,method,data,false);}
+  if(!response.ok){const error=Error(body.error||'Permintaan gagal.');error.status=response.status;throw error;}return body;
+}
+export const session=()=>request('/api/session','GET',undefined,false);
+export const login=(username,password)=>request('/api/login','POST',{username,password},false);
+export const logout=()=>request('/api/logout','POST');
+export const load=()=>request('/api/state');
+export const save=state=>request('/api/state','PUT',state);
+export const clear=revision=>request('/api/state','DELETE',{revision:revision||0});
+export async function legacy(){try{return await legacyLoad();}catch{return null;}}
