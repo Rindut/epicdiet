@@ -108,7 +108,6 @@ export const messages = {
   'Nutrisi: hijau 1, kuning 0,5, merah 0. Hari kosong tidak dihitung sebagai gagal. Setiap kebiasaan perlu jawaban di minimal 5 hari agar skor gabungan tampil.':'Nutrition: green 1, yellow 0.5, red 0. Missing days are not failures. Each habit needs at least 5 logged days before a combined score appears.',
   'Lihat coverage dan target harian':'See coverage and daily targets','Minimal satu tindakan tercapai per hari.':'At least one action completed per day.',
   'Refleksi':'Reflection','Apa yang membuat minggu ini sulit?':'What made this week difficult?','Misalnya, jadwal berubah atau makan di luar…':'For example, a change of schedule or eating out…','Simpan refleksi':'Save reflection',
-  'Satu Epic pada satu waktu. Semua fase tetap bisa kamu lihat.':'One Epic at a time. You can still explore every phase.',
   '65 kg tercapai. Pilih langkah berikutnya.':'65 kg reached. Choose your next step.',
   'Evaluasi juga bagaimana tubuh terasa dan progres di luar timbangan. Fase berikutnya tidak aktif otomatis.':'Consider how your body feels and progress beyond the scale. The next phase does not start automatically.',
   'Cukup di 65 kg':'Finish at 65 kg','Lanjut menuju 60 kg':'Continue towards 60 kg',
